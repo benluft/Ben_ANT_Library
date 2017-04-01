@@ -23,10 +23,10 @@ All rights reserved.
 #define ENABLE_EXTENDED_MESSAGES // Un - comment to enable extended messages.
 
 #define USER_BAUDRATE            (57600)  // For AP1, use 50000; for AT3/AP2, use 57600
-#define USER_RADIOFREQ           (35)     // RF Frequency + 2400 MHz
+#define USER_RADIOFREQ           (50)     // RF Frequency + 2400 MHz
 
 #define USER_ANTCHANNEL          (0)      // ANT channel to use
-#define USER_DEVICENUM           (49)     // Device number
+#define USER_DEVICENUM           (2477)     // Device number
 #define USER_DEVICETYPE          (1)      // Device type
 #define USER_TRANSTYPE           (1)      // Transmission type
 
@@ -770,8 +770,22 @@ BOOL Test_ResponseCallback(UCHAR ucChannel_, UCHAR ucMessageId_)
                printf("Channel ID set\n");
                printf("Setting Radio Frequency...\n");
                bSuccess = ANT_SetChannelRFFreq(USER_ANTCHANNEL, USER_RADIOFREQ);
+			   if (aucResponseBuffer[MESSAGE_BUFFER_DATA3_INDEX] != RESPONSE_NO_ERROR)
+			   {
+				   printf("Error assigning channel: Code 0%d\n", aucResponseBuffer[MESSAGE_BUFFER_DATA3_INDEX]);
+				   break;
+			   }
+			   printf("Channel Period Set\n");
+			   printf("Setting Channel ID...\n");
+			   bSuccess = ANT_SetChannelPeriod(USER_ANTCHANNEL, 328);
+			   break;
                break;
             }
+
+			case MESG_CHANNEL_MESG_PERIOD_ID:
+			{
+
+			}
 
             case MESG_CHANNEL_RADIO_FREQ_ID:
             {
@@ -865,6 +879,7 @@ BOOL Test_ResponseCallback(UCHAR ucChannel_, UCHAR ucMessageId_)
          }
       }
    }
+   printf("This is what I am looking for %d and %d\n",aucResponseBuffer[MESSAGE_BUFFER_DATA2_INDEX],aucResponseBuffer[0]);
    return(TRUE);
 }
 

@@ -33,7 +33,5 @@
   checksum.c
   antfs_directory.c
   Generating Code...
-  ANT_Lib.vcxproj -> C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\Debug\ANT_LIB.lib
-  C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_LIB\..\Bin\DSI_CP210xManufacturing_3_1.dll
-  C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_LIB\..\Bin\DSI_SiUSBXp_3_1.dll
-  2 File(s) copied
+  ANT_Lib.vcxproj -> C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\ANT_LIB.lib
+  0 File(s) copied

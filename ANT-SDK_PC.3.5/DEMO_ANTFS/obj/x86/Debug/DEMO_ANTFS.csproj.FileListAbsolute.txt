@@ -4,3 +4,9 @@ C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\Debug\Demo_ANTFS.pdb
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\DEMO_ANTFS.csprojResolveAssemblyReference.cache
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\Demo_ANTFS.exe
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\Demo_ANTFS.pdb
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\Demo_ANTFS.exe.config
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\Demo_ANTFS.exe
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\Demo_ANTFS.pdb
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\DEMO_ANTFS.csprojResolveAssemblyReference.cache
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\Demo_ANTFS.exe
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\DEMO_ANTFS\obj\x86\Debug\Demo_ANTFS.pdb

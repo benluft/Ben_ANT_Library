@@ -11,3 +11,16 @@ C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.csproj.GenerateResource.Cache
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.exe
 C:\Users\Ben\Documents\U of C 2016-2017\EIE\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.pdb
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\ANT_NetDll_Demo.exe.config
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.exe
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.pdb
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\ANT_NetDll_Demo.exe
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\ANT_NetDll_Demo.pdb
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.csprojResolveAssemblyReference.cache
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\DemoWindow.baml
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\DemoWindow.g.cs
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\App.g.cs
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo_MarkupCompile.cache
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.g.resources
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.Properties.Resources.resources
+C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\ANT_NetDll_Demo\obj\x86\Debug\ANT_NetDll_Demo.csproj.GenerateResource.Cache
