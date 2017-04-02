@@ -1,0 +1,10 @@
+﻿  demo_hr_receiver.cpp
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_hr_receiver\demo_hr_receiver.cpp(122): warning C4477: 'sscanf' : format string '%u' requires an argument of type 'unsigned int *', but variadic argument 1 has type 'UCHAR *'
+  c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_hr_receiver\demo_hr_receiver.cpp(122): note: consider using '%hhu' in the format string
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_hr_receiver\demo_hr_receiver.cpp(122): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_hr_receiver\demo_hr_receiver.cpp(304): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+demo_hr_receiver.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  DEMO_HR_RECEIVER.vcxproj -> C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\DEMO_HR_RECEIVER.exe
+  DEMO_HR_RECEIVER.vcxproj -> C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\DEMO_HR_RECEIVER.pdb (Full PDB)
