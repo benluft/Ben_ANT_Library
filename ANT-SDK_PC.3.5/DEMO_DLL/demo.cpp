@@ -29,6 +29,7 @@ All rights reserved.
 #define USER_DEVICENUM           (2477)     // Device number
 #define USER_DEVICETYPE          (1)      // Device type
 #define USER_TRANSTYPE           (1)      // Transmission type
+#define USER_CHANNELPERIOD		 (1638)	  //Channel_Period
 
 #define USER_NETWORK_KEY         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,}
 #define USER_NETWORK_NUM         (0)      // The network key is assigned to this network number
@@ -37,6 +38,11 @@ All rights reserved.
 #define MAX_CHANNEL_EVENT_SIZE   (MESG_MAX_SIZE_VALUE)     // Channel event buffer size, assumes worst case extended message size
 #define MAX_RESPONSE_SIZE        (MESG_MAX_SIZE_VALUE)     // Protocol response buffer size
 
+/*Midi Timing Constants*/
+
+#define BEATSPERQUARTER					(0x64)	//100 beats per quarter note
+#define TIMEPERQUARTER					(BEATSPERQUARTER * USER_CHANNELPERIOD / 32728) //THIS VALUE MUST BE BETWEEN 65536 AND 16777216
+#define MIDIHEADERSIZE					(41)	//Add to number of delta times and note on to get length of file
 
 // Indexes into message recieved from ANT
 #define MESSAGE_BUFFER_DATA1_INDEX ((UCHAR) 0)
@@ -176,6 +182,8 @@ void Test_Init(UCHAR ucDeviceNumber_, UCHAR ucChannelType_)
    // its own callback function defined. Since we are only
    // going to open one channel, setup one callback function
    // for the channel callback
+
+   UCHAR* aucMIDINoteArray = (UCHAR*)malloc(1);
    ANT_AssignResponseFunction(Test_ResponseCallback, aucResponseBuffer);
    ANT_AssignChannelEventFunction(USER_ANTCHANNEL,Test_ChannelCallback, aucChannelBuffer);
 
@@ -359,6 +367,7 @@ void Test_Start()
    // Clean up ANT
    printf("Disconnecting module...\n");
    ANT_Close();
+   WriteToMIDIFileFirst(134);
 
    printf("Demo has completed successfully!\n");
 
@@ -388,6 +397,17 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
    static BOOL bNoteTwoHeld = FALSE;
    static BOOL bNoteThreeHeld = FALSE;
    static BOOL bNoteFourHeld = FALSE;
+
+   //Used to calculated delta time values
+   static int iNoteOneTime = 0;
+   static int iNoteTwoTime = 0;
+   static int iNoteThreeTime = 0;
+   static int iNoteFourTime = 0;
+
+   //For telling the length of the file, gives amount of note on and delta time messages
+   static int iFileLength = 0;
+
+   static BOOL bFirstArrayInit = TRUE;
 
    switch(ucEvent_)
    {
@@ -574,14 +594,76 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
    // If we recieved a data message, diplay its contents here.
    if(bPrintBuffer)
    {
-      if(bDisplay)
+      if(1) //Needs to always happen
       {
-		  if (aucChannelBuffer[ucDataOffset + 0] == 1)
+		  //Add 1 to the delta time counter for each message recieved
+		  iNoteOneTime++;
+		  iNoteTwoTime++;
+		  iNoteThreeTime++;
+		  iNoteFourTime++;
+		  
+		  //IF ALL BUTTONS PUSHED SAVE THE FILE
+		  if (aucChannelBuffer[ucDataOffset] == 1 && aucChannelBuffer[ucDataOffset + 1] == 1 && aucChannelBuffer[ucDataOffset + 2] == 1 && aucChannelBuffer[ucDataOffset + 3] == 1)
+		  {
+			  WriteToMIDIFileFirst(iFileLength + MIDIHEADERSIZE);
+			  WriteToMIDIFileSecond(aucMIDINoteArray, iFileLength + 4);
+			  // Quit
+			  printf("Closing channel...\n");
+			  bBroadcasting = FALSE;
+			  ANT_CloseChannel(USER_ANTCHANNEL);
+			  return(TRUE);
+		  }
+
+		  if (aucChannelBuffer[ucDataOffset + 0] == 1 && bNoteOneHeld == FALSE)
 		  {
 			  if (bNoteOneHeld == FALSE)
 			  {
 				  printf("Bass Drum\n");
 				  bNoteOneHeld = TRUE;
+				  iFileLength = CreateMIDINoteArray(iNoteOneTime, BUTTON0INSTRUMENT, iFileLength, aucMIDINoteArray);
+				  for (int i = 0; i < iFileLength; i++)
+				  {
+					  printf("[%02x] ",aucMIDINoteArray[i]);
+				  }
+				  printf("\n");
+				  printf("The Length is %d\n", iFileLength);
+				  printf("The note time is %d\n", iNoteOneTime);
+				  iNoteOneTime = 0;
+			  }
+		  }
+
+		  if (aucChannelBuffer[ucDataOffset + 1] == 1)
+		  {
+			  if (bNoteTwoHeld == FALSE)
+			  {
+				  printf("Closed Hi Hat\n");
+				  bNoteTwoHeld = TRUE;
+				  iFileLength = CreateMIDINoteArray(iNoteTwoTime, BUTTON1INSTRUMENT, iFileLength, aucMIDINoteArray);
+				  iNoteTwoTime = 0;
+			  }
+
+		  }
+
+		  if (aucChannelBuffer[ucDataOffset + 2] == 1)
+		  {
+			  if (bNoteThreeHeld == FALSE)
+			  {
+				  printf("Crash Cymbol\n");
+				  bNoteThreeHeld = TRUE;
+				  iFileLength = CreateMIDINoteArray(iNoteThreeTime, BUTTON2INSTRUMENT, iFileLength, aucMIDINoteArray);
+				  iNoteThreeTime = 0;
+
+			  }
+		  }
+
+		  if (aucChannelBuffer[ucDataOffset + 3] == 1)
+		  {
+			  if (bNoteFourHeld == FALSE)
+			  {
+				  printf("Acostic Snare\n");
+				  bNoteFourHeld = TRUE;
+				  iFileLength = CreateMIDINoteArray(iNoteFourTime, BUTTON3INSTRUMENT, iFileLength, aucMIDINoteArray);
+				  iNoteFourTime = 0;
 			  }
 		  }
 
@@ -593,16 +675,6 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 			  }
 		  }
 
-		  if (aucChannelBuffer[ucDataOffset + 1] == 1)
-		  {
-			  if (bNoteTwoHeld == FALSE)
-			  {
-				  printf("Closed Hi Hat\n");
-				  bNoteTwoHeld = TRUE;
-			  }
-			 
-		  }
-
 		  if (bNoteTwoHeld == TRUE)
 		  {
 			  if (aucChannelBuffer[ucDataOffset + 1] == 0)
@@ -611,30 +683,11 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 			  }
 		  }
 
-		  if (aucChannelBuffer[ucDataOffset + 2] == 1)
-		  {
-			  if (bNoteThreeHeld == FALSE)
-			  {
-				  printf("Crash Cymbol\n");
-				  bNoteThreeHeld = TRUE;
-
-			  }  
-		  }
-
 		  if (bNoteThreeHeld == TRUE)
 		  {
 			  if (aucChannelBuffer[ucDataOffset + 2] == 0)
 			  {
 				  bNoteThreeHeld = FALSE;
-			  }
-		  }
-
-		  if (aucChannelBuffer[ucDataOffset + 3] == 1)
-		  {
-			  if (bNoteFourHeld == FALSE)
-			  {
-				  printf("Acostic Snare\n");
-				  bNoteFourHeld = TRUE;
 			  }
 		  }
 
@@ -844,7 +897,7 @@ BOOL Test_ResponseCallback(UCHAR ucChannel_, UCHAR ucMessageId_)
 			   }
 			   printf("Channel Period Set\n");
 			   printf("Setting Channel ID...\n");
-			   bSuccess = ANT_SetChannelPeriod(USER_ANTCHANNEL, 1638);
+			   bSuccess = ANT_SetChannelPeriod(USER_ANTCHANNEL, USER_CHANNELPERIOD);
 			   break;
                break;
             }
@@ -946,7 +999,6 @@ BOOL Test_ResponseCallback(UCHAR ucChannel_, UCHAR ucMessageId_)
          }
       }
    }
-   printf("This is what I am looking for %d and %d\n",aucResponseBuffer[MESSAGE_BUFFER_DATA2_INDEX],aucResponseBuffer[0]);
    return(TRUE);
 }
 
@@ -978,6 +1030,208 @@ void PrintMenu()
    fflush(stdout);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// DeltaTimeLength
+//
+//Converts a time in seconds to a MIDI delta time measurement
+//
+///////////////////////////////////////////////////////////////////////////////
+
+int DeltaTimeLength(int TimeDecimal)
+{
+	if (TimeDecimal <= 127)
+	{
+		return TimeDecimal;
+	}
+	else if (TimeDecimal > 127 && TimeDecimal <= 16383)
+	{
+		int upperbits;
+		int lowerbits;
+		int returnval;
+		upperbits = TimeDecimal & 0x3f80;
+		upperbits = upperbits << 1;
+		lowerbits = TimeDecimal & 0x7f;
+		returnval = upperbits + lowerbits;
+		returnval += 32768;
+		return returnval;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+//
+//ConvertIntToChar
+//
+//REQUIRES:
+//The arguments are an integer, and a pointer to an unsigned 8 bit array
+//of size 4
+//PROMISES:
+//The array will be populated with the integer split into bits, with
+//the 4th element (3) containing the LSB
+//
+////////////////////////////////////////////////////////////////////////
+void ConvertIntToChar(int val, UCHAR* bytes)
+{
+
+	bytes[0] = (val >> 24) & 0xFF;
+	bytes[1] = (val >> 16) & 0xFF;
+	bytes[2] = (val >> 8) & 0xFF;
+	bytes[3] = val & 0xFF;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+//WriteToMIDIFIleFirst
+//
+//Writes the MIDI Header to the file
+//
+//////////////////////////////////////////////////////////////////////
+void WriteToMIDIFileFirst(int iTrackLength)
+{
+	UCHAR aucPPQBytes[] = { 0,0,0,0 };
+	UCHAR aucTrackLength[] = { 0,0,0,0 };
+	UCHAR aucTimePerQuarter[] = { 0,0,0,0 };
+
+	ConvertIntToChar(BEATSPERQUARTER, aucPPQBytes);
+	ConvertIntToChar(iTrackLength, aucTrackLength);
+	ConvertIntToChar(TIMEPERQUARTER * 1000000, aucTimePerQuarter);
+	
+	UCHAR au8MIDIHeader[] = { 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, aucPPQBytes[2], aucPPQBytes[3],
+		0x4d, 0x54, 0x72, 0x9b, aucTrackLength[0], aucTrackLength[1], aucTrackLength[2], aucTrackLength[3], 0x00, 0xff, 0x03, 0x0f,
+		0x43, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x44, 0x72, 0x75, 0x6d, 0x20, 0x53, 0x6f, 0x6c, 0x6f,	//Song name//
+		0x00, 0xff, 0x58, 0x04, 0x04, 0x02, 0x18, 0x08, 0x00, 0xff, 0x51, 0x03, aucTimePerQuarter[1],
+		aucTimePerQuarter[2], aucTimePerQuarter[3], 0x00, 0xC9, 0x00 };
+
+	char *filename = "Drumfile.mid";
+
+	FILE *fp;
+	fp = fopen(filename, "wb");
+
+	if (fp == NULL) {
+		fprintf(stderr, "Error: cannot open file:  %s", filename);
+		exit(1);
+	}
+
+	fwrite((void *)&au8MIDIHeader, sizeof(char), 59, fp);
+	fclose(fp);
+	return;
+	printf("Got here\n");
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+//WriteToMIDIFIleSecond
+//
+//Writes the MIDI notes to the file
+//
+//////////////////////////////////////////////////////////////////////
+void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
+{
+	char aucEndOfFile[] = { 0x00, 0xFF, 0x2F, 0x00 };
+
+	char *filename = "Drumfile.mid";
+
+	FILE *fp;
+	fp = fopen(filename, "ab");
+
+	if (fp == NULL) {
+		fprintf(stderr, "Error: cannot open file:  %s", filename);
+		exit(1);
+	}
+
+	fwrite((void *)&aucNoteArray, sizeof(char), iLengthOfNotes , fp);
+	
+	free(aucNoteArray);
+	
+	fwrite((void *)&aucEndOfFile, sizeof(char), 4, fp);
+	
+	fclose(fp);
+	return;
+}
+
+/////////////////////////////////////////////////////////////////////
+//
+// CreateMIDINoteArray
+//
+// REQUIRES:
+// Input is a delta time value, the note played, the previous number of notes played,
+// and the note number to be played, along with a dynamically allocated array
+// that holds the previous notes
+//
+// PROMISES: 
+// Will add the notes to be played to the array and return the new length
+//
+////////////////////////////////////////////////////////////////////////
+int CreateMIDINoteArray(int iDeltaTime, int iNotePlayed, int iPreviousSize, UCHAR* NoteArray)
+{
+	int iTotalSize;
+
+	//Account for the need for different delta time sizes causing different number of bytes
+	if (iDeltaTime < 127)
+	{
+		iTotalSize = iPreviousSize + 8;
+	}
+	else
+	{
+		iTotalSize = iPreviousSize + 9;
+	}
+
+	UCHAR* aucHoldArray = (UCHAR*)malloc((iTotalSize) * sizeof(UCHAR));
+	if (aucHoldArray == NULL)
+	{
+		printf("Problem with first malloc\n");
+		exit(1);
+	}
+
+	for (int i = 0; i < iPreviousSize; i++)
+	{
+		aucHoldArray[i] = NoteArray[i];
+	}
+
+	free(NoteArray);
+	NoteArray = (UCHAR*)malloc(iTotalSize * sizeof(UCHAR));
+	if (NoteArray == NULL)
+	{
+		printf("Problem with second malloc\n");
+		exit(1);
+	}
+
+	int iVariableDeltaTime = DeltaTimeLength(iDeltaTime);
+	UCHAR aucDeltaTimeBytes[] = { 0,0,0,0 };
+	ConvertIntToChar(iVariableDeltaTime, aucDeltaTimeBytes);
+
+	UCHAR aucNotePlayMsgLong[] = { aucDeltaTimeBytes[2], aucDeltaTimeBytes[3], DRUMCHANNELON, iNotePlayed, DRUMVOLUME, 0x00, DRUMCHANNELOFF, iNotePlayed, NOTEOFFVOLUME };
+	UCHAR aucNotePlayMsgShort[] = { aucDeltaTimeBytes[3], DRUMCHANNELON, iNotePlayed, DRUMVOLUME, 0x00, DRUMCHANNELOFF, iNotePlayed, NOTEOFFVOLUME };
+	
+
+	if (iDeltaTime < 127)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			aucHoldArray[iPreviousSize + i] = aucNotePlayMsgShort[i];
+			printf("Does it get here?\n");
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			aucHoldArray[iPreviousSize + i] = aucNotePlayMsgLong[i];
+		}
+	}
+	
+
+	for (int i = 0; i < iTotalSize; i++)
+	{
+		NoteArray[i] = aucHoldArray[i];
+		printf("How about here\n");
+	}
+	free(aucHoldArray);
+	return iTotalSize;
+}
 
 
 

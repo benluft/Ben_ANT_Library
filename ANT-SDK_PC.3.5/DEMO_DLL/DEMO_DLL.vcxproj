@@ -90,6 +90,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="demo.cpp" />
+    <ClCompile Include="Drumset.cpp" />
     <ClCompile Include="libant.cpp" />
   </ItemGroup>
   <ItemGroup>

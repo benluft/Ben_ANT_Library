@@ -21,6 +21,9 @@
     <ClCompile Include="libant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Drumset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="demo.h">
