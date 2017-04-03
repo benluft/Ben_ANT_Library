@@ -1098,7 +1098,7 @@ void WriteToMIDIFileFirst(int iTrackLength)
 
 	ConvertIntToChar(BEATSPERQUARTER, aucPPQBytes);
 	ConvertIntToChar(iTrackLength, aucTrackLength);
-	ConvertIntToChar(TIMEPERQUARTER * 1000000, aucTimePerQuarter);
+	ConvertIntToChar(TIMEPERQUARTER * 500000, aucTimePerQuarter);
 	
 	UCHAR au8MIDIHeader[] = { 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, aucPPQBytes[2], aucPPQBytes[3],
 		0x4d, 0x54, 0x72, 0x6b, aucTrackLength[0], aucTrackLength[1], aucTrackLength[2], aucTrackLength[3], 0x00, 0xff, 0x03, 0x0f,
