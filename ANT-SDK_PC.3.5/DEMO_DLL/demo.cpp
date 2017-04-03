@@ -183,7 +183,6 @@ void Test_Init(UCHAR ucDeviceNumber_, UCHAR ucChannelType_)
    // going to open one channel, setup one callback function
    // for the channel callback
 
-   UCHAR* aucMIDINoteArray = (UCHAR*)malloc(1);
    ANT_AssignResponseFunction(Test_ResponseCallback, aucResponseBuffer);
    ANT_AssignChannelEventFunction(USER_ANTCHANNEL,Test_ChannelCallback, aucChannelBuffer);
 
@@ -404,6 +403,7 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
    static int iNoteThreeTime = 0;
    static int iNoteFourTime = 0;
 
+   static UCHAR aucMIDINoteArray[2400];
    //For telling the length of the file, gives amount of note on and delta time messages
    static int iFileLength = 0;
 
@@ -605,8 +605,9 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 		  //IF ALL BUTTONS PUSHED SAVE THE FILE
 		  if (aucChannelBuffer[ucDataOffset] == 1 && aucChannelBuffer[ucDataOffset + 1] == 1 && aucChannelBuffer[ucDataOffset + 2] == 1 && aucChannelBuffer[ucDataOffset + 3] == 1)
 		  {
+			  printf("All Buttons Pushed");
 			  WriteToMIDIFileFirst(iFileLength + MIDIHEADERSIZE);
-			  WriteToMIDIFileSecond(aucMIDINoteArray, iFileLength + 4);
+			  WriteToMIDIFileSecond(aucMIDINoteArray, iFileLength);
 			  // Quit
 			  printf("Closing channel...\n");
 			  bBroadcasting = FALSE;
@@ -1091,6 +1092,7 @@ void ConvertIntToChar(int val, UCHAR* bytes)
 //////////////////////////////////////////////////////////////////////
 void WriteToMIDIFileFirst(int iTrackLength)
 {
+	printf("First Write Entered\n");
 	UCHAR aucPPQBytes[] = { 0,0,0,0 };
 	UCHAR aucTrackLength[] = { 0,0,0,0 };
 	UCHAR aucTimePerQuarter[] = { 0,0,0,0 };
@@ -1117,8 +1119,8 @@ void WriteToMIDIFileFirst(int iTrackLength)
 
 	fwrite((void *)&au8MIDIHeader, sizeof(char), 59, fp);
 	fclose(fp);
+	printf("End of first write\n");
 	return;
-	printf("Got here\n");
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1130,7 +1132,11 @@ void WriteToMIDIFileFirst(int iTrackLength)
 //////////////////////////////////////////////////////////////////////
 void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
 {
-	char aucEndOfFile[] = { 0x00, 0xFF, 0x2F, 0x00 };
+	printf("Second Write Entered \n");
+	aucNoteArray[iLengthOfNotes] = 0x00;
+	aucNoteArray[iLengthOfNotes + 1] = 0xFF;
+	aucNoteArray[iLengthOfNotes + 2] = 0x2F; 
+	aucNoteArray[iLengthOfNotes + 3] = 0x00;
 
 	char *filename = "Drumfile.mid";
 
@@ -1138,17 +1144,14 @@ void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
 	fp = fopen(filename, "ab");
 
 	if (fp == NULL) {
-		fprintf(stderr, "Error: cannot open file:  %s", filename);
+		printf("Error: cannot open file:  %s", filename);
 		exit(1);
 	}
 
-	fwrite((void *)&aucNoteArray, sizeof(char), iLengthOfNotes , fp);
-	
-	free(aucNoteArray);
-	
-	fwrite((void *)&aucEndOfFile, sizeof(char), 4, fp);
-	
+	fwrite((void *)&aucNoteArray, sizeof(char), iLengthOfNotes+4 , fp);
+
 	fclose(fp);
+	printf("second Write Ended\n");
 	return;
 }
 
@@ -1179,26 +1182,6 @@ int CreateMIDINoteArray(int iDeltaTime, int iNotePlayed, int iPreviousSize, UCHA
 		iTotalSize = iPreviousSize + 9;
 	}
 
-	UCHAR* aucHoldArray = (UCHAR*)malloc((iTotalSize) * sizeof(UCHAR));
-	if (aucHoldArray == NULL)
-	{
-		printf("Problem with first malloc\n");
-		exit(1);
-	}
-
-	for (int i = 0; i < iPreviousSize; i++)
-	{
-		aucHoldArray[i] = NoteArray[i];
-	}
-
-	free(NoteArray);
-	NoteArray = (UCHAR*)malloc(iTotalSize * sizeof(UCHAR));
-	if (NoteArray == NULL)
-	{
-		printf("Problem with second malloc\n");
-		exit(1);
-	}
-
 	int iVariableDeltaTime = DeltaTimeLength(iDeltaTime);
 	UCHAR aucDeltaTimeBytes[] = { 0,0,0,0 };
 	ConvertIntToChar(iVariableDeltaTime, aucDeltaTimeBytes);
@@ -1209,27 +1192,19 @@ int CreateMIDINoteArray(int iDeltaTime, int iNotePlayed, int iPreviousSize, UCHA
 
 	if (iDeltaTime < 127)
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = iPreviousSize; i < iTotalSize; i++)
 		{
-			aucHoldArray[iPreviousSize + i] = aucNotePlayMsgShort[i];
-			printf("Does it get here?\n");
+			NoteArray[i] = aucNotePlayMsgShort[i-iPreviousSize];
 		}
 	}
 	else
 	{
-		for (int i = 0; i < 9; i++)
+		for (int i = iPreviousSize; i < iTotalSize; i++)
 		{
-			aucHoldArray[iPreviousSize + i] = aucNotePlayMsgLong[i];
+			NoteArray[i] = aucNotePlayMsgLong[i-iPreviousSize];
 		}
 	}
 	
-
-	for (int i = 0; i < iTotalSize; i++)
-	{
-		NoteArray[i] = aucHoldArray[i];
-		printf("How about here\n");
-	}
-	free(aucHoldArray);
 	return iTotalSize;
 }
 
