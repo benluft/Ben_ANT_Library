@@ -621,13 +621,13 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 				  printf("Bass Drum\n");
 				  bNoteOneHeld = TRUE;
 				  iFileLength = CreateMIDINoteArray(iNoteOneTime, BUTTON0INSTRUMENT, iFileLength, aucMIDINoteArray);
-				  for (int i = 0; i < iFileLength; i++)
-				  {
-					  printf("[%02x] ",aucMIDINoteArray[i]);
-				  }
-				  printf("\n");
-				  printf("The Length is %d\n", iFileLength);
-				  printf("The note time is %d\n", iNoteOneTime);
+				  //for (int i = 0; i < iFileLength; i++)
+				  //{
+					 // printf("[%02x] ",aucMIDINoteArray[i]);
+				  //}
+				  //printf("\n");
+				  //printf("The Length is %d\n", iFileLength);
+				  //printf("The note time is %d\n", iNoteOneTime);
 				  iNoteOneTime = 0;
 			  }
 		  }
@@ -1091,7 +1091,6 @@ void ConvertIntToChar(int val, UCHAR* bytes)
 //////////////////////////////////////////////////////////////////////
 void WriteToMIDIFileFirst(int iTrackLength)
 {
-	printf("First Write Entered\n");
 	UCHAR aucPPQBytes[] = { 0,0,0,0 };
 	UCHAR aucTrackLength[] = { 0,0,0,0 };
 	UCHAR aucTimePerQuarter[] = { 0,0,0,0 };
@@ -1118,7 +1117,6 @@ void WriteToMIDIFileFirst(int iTrackLength)
 
 	fwrite((void *)&au8MIDIHeader, sizeof(char), 59, fp);
 	fclose(fp);
-	printf("End of first write\n");
 	return;
 }
 
@@ -1131,7 +1129,6 @@ void WriteToMIDIFileFirst(int iTrackLength)
 //////////////////////////////////////////////////////////////////////
 void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
 {
-	printf("Second Write Entered \n");
 	aucNoteArray[iLengthOfNotes] = 0x00;
 	aucNoteArray[iLengthOfNotes + 1] = 0xFF;
 	aucNoteArray[iLengthOfNotes + 2] = 0x2F; 
@@ -1153,7 +1150,6 @@ void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
 	}
 
 	fclose(fp);
-	printf("second Write Ended\n");
 	return;
 }
 

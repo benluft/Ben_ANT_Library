@@ -13,11 +13,11 @@ c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(2
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
 c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(240): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
-c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1112): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1111): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1143): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1140): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1191): warning C4838: conversion from 'int' to 'UCHAR' requires a narrowing conversion
-c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1192): warning C4838: conversion from 'int' to 'UCHAR' requires a narrowing conversion
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1187): warning C4838: conversion from 'int' to 'UCHAR' requires a narrowing conversion
+c:\users\ben\documents\github\ben_ant_library\ant-sdk_pc.3.5\demo_dll\demo.cpp(1188): warning C4838: conversion from 'int' to 'UCHAR' requires a narrowing conversion
   DEMO_DLL.vcxproj -> C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\DEMO_DLL.exe
   DEMO_DLL.vcxproj -> C:\Users\Ben\Documents\GitHub\Ben_ANT_Library\ANT-SDK_PC.3.5\Debug\DEMO_DLL.pdb (Full PDB)
