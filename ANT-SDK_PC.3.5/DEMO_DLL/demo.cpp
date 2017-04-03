@@ -366,7 +366,6 @@ void Test_Start()
    // Clean up ANT
    printf("Disconnecting module...\n");
    ANT_Close();
-   WriteToMIDIFileFirst(134);
 
    printf("Demo has completed successfully!\n");
 
@@ -606,7 +605,7 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 		  if (aucChannelBuffer[ucDataOffset] == 1 && aucChannelBuffer[ucDataOffset + 1] == 1 && aucChannelBuffer[ucDataOffset + 2] == 1 && aucChannelBuffer[ucDataOffset + 3] == 1)
 		  {
 			  printf("All Buttons Pushed");
-			  WriteToMIDIFileFirst(iFileLength + MIDIHEADERSIZE);
+			  WriteToMIDIFileFirst(iFileLength+MIDIHEADERSIZE);
 			  WriteToMIDIFileSecond(aucMIDINoteArray, iFileLength);
 			  // Quit
 			  printf("Closing channel...\n");
@@ -1102,7 +1101,7 @@ void WriteToMIDIFileFirst(int iTrackLength)
 	ConvertIntToChar(TIMEPERQUARTER * 1000000, aucTimePerQuarter);
 	
 	UCHAR au8MIDIHeader[] = { 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, aucPPQBytes[2], aucPPQBytes[3],
-		0x4d, 0x54, 0x72, 0x9b, aucTrackLength[0], aucTrackLength[1], aucTrackLength[2], aucTrackLength[3], 0x00, 0xff, 0x03, 0x0f,
+		0x4d, 0x54, 0x72, 0x6b, aucTrackLength[0], aucTrackLength[1], aucTrackLength[2], aucTrackLength[3], 0x00, 0xff, 0x03, 0x0f,
 		0x43, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x44, 0x72, 0x75, 0x6d, 0x20, 0x53, 0x6f, 0x6c, 0x6f,	//Song name//
 		0x00, 0xff, 0x58, 0x04, 0x04, 0x02, 0x18, 0x08, 0x00, 0xff, 0x51, 0x03, aucTimePerQuarter[1],
 		aucTimePerQuarter[2], aucTimePerQuarter[3], 0x00, 0xC9, 0x00 };
@@ -1148,7 +1147,10 @@ void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes)
 		exit(1);
 	}
 
-	fwrite((void *)&aucNoteArray, sizeof(char), iLengthOfNotes+4 , fp);
+	for (int i = 0; i < (iLengthOfNotes + 4); i++)
+	{
+		fputc(aucNoteArray[i], fp);
+	}
 
 	fclose(fp);
 	printf("second Write Ended\n");
