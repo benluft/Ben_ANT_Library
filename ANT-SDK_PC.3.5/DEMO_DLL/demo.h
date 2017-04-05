@@ -29,7 +29,7 @@ void WriteToMIDIFileSecond(UCHAR* aucNoteArray, int iLengthOfNotes);
 
 #define BUTTON0INSTRUMENT             UCHAR (0x23)      //Bass Drum 
 #define BUTTON1INSTRUMENT             UCHAR (0x2A)      //Closed Hi Hat
-#define BUTTON2INSTRUMENT             UCHAR  (0x31)      //Crash Cymbol
+#define BUTTON2INSTRUMENT             UCHAR  (0x30)      //Hi Mid Tom
 #define BUTTON3INSTRUMENT             UCHAR  (0x26)      //Acostic Snare
 
 #define DRUMVOLUME					  UCHAR (0x7F)

@@ -42,7 +42,7 @@ All rights reserved.
 
 #define BEATSPERQUARTER					(0x64)	//100 beats per quarter note
 #define TIMEPERQUARTER					(BEATSPERQUARTER * USER_CHANNELPERIOD / 32728) //THIS VALUE MUST BE BETWEEN 65536 AND 16777216
-#define MIDIHEADERSIZE					(41)	//Add to number of delta times and note on to get length of file
+#define MIDIHEADERSIZE					(45)	//Add to number of delta times and note on to get length of file
 
 // Indexes into message recieved from ANT
 #define MESSAGE_BUFFER_DATA1_INDEX ((UCHAR) 0)
@@ -648,7 +648,7 @@ BOOL Test_ChannelCallback(UCHAR ucChannel_, UCHAR ucEvent_)
 		  {
 			  if (bNoteThreeHeld == FALSE)
 			  {
-				  printf("Crash Cymbol\n");
+				  printf("Hi Mid Tom\n");
 				  bNoteThreeHeld = TRUE;
 				  iFileLength = CreateMIDINoteArray(iNoteThreeTime, BUTTON2INSTRUMENT, iFileLength, aucMIDINoteArray);
 				  iNoteThreeTime = 0;
@@ -1097,12 +1097,12 @@ void WriteToMIDIFileFirst(int iTrackLength)
 
 	ConvertIntToChar(BEATSPERQUARTER, aucPPQBytes);
 	ConvertIntToChar(iTrackLength, aucTrackLength);
-	ConvertIntToChar(TIMEPERQUARTER * 500000, aucTimePerQuarter);
+	ConvertIntToChar(TIMEPERQUARTER * 350000, aucTimePerQuarter);
 	
 	UCHAR au8MIDIHeader[] = { 0x4d, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, aucPPQBytes[2], aucPPQBytes[3],
 		0x4d, 0x54, 0x72, 0x6b, aucTrackLength[0], aucTrackLength[1], aucTrackLength[2], aucTrackLength[3], 0x00, 0xff, 0x03, 0x0f,
 		0x43, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x44, 0x72, 0x75, 0x6d, 0x20, 0x53, 0x6f, 0x6c, 0x6f,	//Song name//
-		0x00, 0xff, 0x58, 0x04, 0x04, 0x02, 0x18, 0x08, 0x00, 0xff, 0x51, 0x03, aucTimePerQuarter[1],
+		0x00, 0xB9, 0x07, 0x7F, 0x00, 0xff, 0x58, 0x04, 0x04, 0x02, 0x18, 0x08, 0x00, 0xFF, 0x51, 0x03, aucTimePerQuarter[1],
 		aucTimePerQuarter[2], aucTimePerQuarter[3], 0x00, 0xC9, 0x00 };
 
 	char *filename = "Drumfile.mid";
@@ -1115,7 +1115,7 @@ void WriteToMIDIFileFirst(int iTrackLength)
 		exit(1);
 	}
 
-	fwrite((void *)&au8MIDIHeader, sizeof(char), 59, fp);
+	fwrite((void *)&au8MIDIHeader, sizeof(char), 63, fp);
 	fclose(fp);
 	return;
 }
